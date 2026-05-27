@@ -46,42 +46,27 @@ int main() {
 
 void readCidade(Cidade c[]) {
   for (int i = 0; i < T; i++) {
-    cout << "Digite o ID da Cidade: " << endl;
-    cin >> c[i].id;
-    cout << "Digite o Nome da Cidade: " << endl;
-    cin.ignore();
-    getline(cin, c[i].nome);
-    cout << "Digite a UF do Estado da Cidade: " << endl;
-    cin >> c[i].uf;
+    cout << "ID: " << c[i].id << endl;
+    cout << "Nome: " << c[i].nome << endl;
+    cout << "UF: " << c[i].uf << endl;
   }
 }
 
 void readServicos(Servico s[]) {
   for (int i = 0; i < T; i++) {
-    cout << "Digite o ID do Servico: " << endl;
-    cin >> s[i].id;
-    cout << "Digite a Descrição do Serviço: " << endl;
-    cin.ignore();
-    getline(cin, s[i].descricao);
-    cout << "Digite o Valor de Mão de Obra do Serviço:" << endl;
-    cin >> s[i].valorMaoDeObra;
+    cout << "ID: " << s[i].id << endl;
+    cout << "Descrição: " << s[i].descricao << endl;
+    cout << "Valor de Mão de Obra: " << s[i].valorMaoDeObra << endl;
   }
 }
 
 void readPeca(Peca p[]) {
   for (int i = 0; i < T; i++) {
-    cout << "Digite o ID da Peça: " << endl;
-    cin >> p[i].id;
-    cout << "Digite a Descrição da Peça: " << endl;
-    cin.ignore();
-    getline(cin, p[i].descricao);
-    cout << "Digite a Quantidade em Estoque da Peça: " << endl;
-    cin >> p[i].qtdeEstoque;
-    cout << "Digite a Quantidade de Estoque Mínima da Peça: " << endl;
-    cin >> p[i].minEstoque;
-    cout << "Digite a Quantidade de Estoque Máxima da Peça: " << endl;
-    cin >> p[i].maxEstoque;
-    cout << "Digite o Preço da Peça: " << endl;
-    cin >> p[i].preco;
+    cout << "ID:" << p[i].id << endl;
+    cout << "Descrição: " << p[i].descricao << endl;
+    cout << "Quantidade em Estoque: " << p[i].qtdeEstoque << endl;
+    cout << "Quantidade Mínima: " << p[i].minEstoque << endl;
+    cout << "Quantidade Maxíma: " << p[i].maxEstoque << endl;
+    cout << "Preço Unitário: " << p[i].preco << endl;
   }
 }
