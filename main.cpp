@@ -28,6 +28,11 @@ struct Cliente {
   string nome, telefone, endereco;
 };
 
+struct Veiculo {
+  int ano, idCliente;
+  string placa, modelo, marca;
+};
+
 // Structs
 
 // Protótipos
@@ -36,7 +41,7 @@ void readServicos(Servico s[]);
 void readPeca(Peca p[]);
 void setCliente(Cliente cl[], Cidade c[], int &cont);
 void searchCidade(Cidade c[], int id);
-void searchCliente(Cliente cl[], int exist, int id);
+void searchCliente(Cliente cl[], int &exist, int id);
 void includeCliente(Cliente cl[], Cliente clT[], Cliente clA[], int contCliente,
                     int contClienteT, int contClienteA);
 
@@ -141,12 +146,14 @@ void searchCliente(Cliente cl[], int &exist, int id) {
       init = middle + 1;
     } else {
       exist = 1;
+      cout << "Cliente encontrado!" << endl;
+      cout << "Nome: " << cl[middle].nome << endl;
     }
   }
 }
 
 void includeCliente(Cliente cl[], Cliente clT[], Cliente clA[], int contCliente,
-                    int contClienteT, int contClienteA) {
+                    int contClienteT, int &contClienteA) {
   int i = 0, j = 0, k = 0;
 
   while (i < contCliente and j < contClienteT) {
@@ -171,4 +178,47 @@ void includeCliente(Cliente cl[], Cliente clT[], Cliente clA[], int contCliente,
     k++;
   }
   contClienteA = k;
+}
+
+void setVeiculo(Veiculo v[], Cliente cl[], int &cont) {
+  cont = 0;
+  while (cont < T) {
+    cout << "Digite a Placa do Veículo: (0 para sair): " << endl;
+    cin >> v[cont].placa;
+    int exist = 0;
+    searchVeiculo(v, exist, v[cont].placa);
+    if (exist == 1) {
+      cout << "ID Já Existente na tabela!" << endl;
+      break;
+    }
+    if (v[cont].id == 0) {
+      break;
+    } else {
+      cout << "Digite o Modelo do Veículo: " << endl;
+      getline(cin, v[cont].modelo);
+      cout << "Digite a Marca do Veículo: " << endl;
+      getline(cin, v[cont].marca);
+      cout << "Digite o Ano do Veículo: " << endl;
+      cin >> v[cont].ano;
+      cout << "Digite o ID do Cliente: " << endl;
+      cin >> v[cont].idCliente;
+      searchCliente(cl, exist, v[cont].idCliente);
+    }
+  }
+}
+
+void searchVeiculo(Veiculo v[], int exist, string id) {
+  int init = 0, end = T - 1, middle = 0;
+  while (init <= end) {
+    middle = (init + end) / 2;
+    if (v[middle].placa > id) {
+      end = middle - 1;
+    } else if (v[middle].placa < id) {
+      init = middle + 1;
+    } else {
+      exist = 1;
+      cout << "Placa já cadastrada!" << endl;
+      cout << "Modelo: " << v[middle].modelo << endl;
+    }
+  }
 }

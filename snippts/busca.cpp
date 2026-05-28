@@ -1,18 +1,13 @@
-void search(Cliente v[], int x) {
-  int inicio = 0, fim = T - 1, meio = 0;
-  for (int i = 0; i < T; i++) {
-    meio = (inicio + fim) / 2;
-    if (v[meio].id > x) {
-      fim = meio - 1;
-    } else if (v[meio].id < x) {
-      inicio = meio + 1;
-    }
-    if (v[meio].id == x) {
-      cout << "Encontrado!" << endl;
-      cout << "ID:" << v[meio].id << " Nome: " << v[meio].nome
-           << " Endereço: " << v[meio].endereco << " Cidade: " << v[meio].cidade
-           << " UF: " << v[meio].uf << endl;
-      break;
+void searchCliente(Cliente cl[], int &exist, int id) {
+  int init = 0, end = T - 1, middle = 0;
+  while (init <= end) {
+    middle = (init + end) / 2;
+    if (cl[middle].id > id) {
+      end = middle - 1;
+    } else if (cl[middle].id < id) {
+      init = middle + 1;
+    } else {
+      exist = 1;
     }
   }
 }
