@@ -37,6 +37,8 @@ void readPeca(Peca p[]);
 void setCliente(Cliente cl[], Cidade c[], int &cont);
 void searchCidade(Cidade c[], int id);
 void searchCliente(Cliente cl[], int exist, int id);
+void includeCliente(Cliente cl[], Cliente clT[], Cliente clA[], int contCliente,
+                    int contClienteT, int contClienteA);
 
 // Protótipos
 
@@ -46,14 +48,15 @@ int main() {
   Cidade c[T];
   Servico s[T];
   Peca p[T];
-  Cliente cl[T];
+  Cliente cl[T], clT[T], clA[T];
 
   // Structs
 
   // Variables
-  int contClienteS = 0, contClienteT = 0, contClienteA = 0;
+  int contCliente = 0, contClienteT = 0, contClienteA = 0;
   // Variables
-  setCliente(cl, c, contClienteS);
+  setCliente(cl, c, contCliente);
+  includeCliente(cl, clT, clA, contCliente, contClienteT, contClienteA);
 }
 
 void readCidade(Cidade c[]) {
@@ -140,4 +143,32 @@ void searchCliente(Cliente cl[], int &exist, int id) {
       exist = 1;
     }
   }
+}
+
+void includeCliente(Cliente cl[], Cliente clT[], Cliente clA[], int contCliente,
+                    int contClienteT, int contClienteA) {
+  int i = 0, j = 0, k = 0;
+
+  while (i < contCliente and j < contClienteT) {
+    if (cl[i].id < clT[i].id) {
+      clA[k] = cl[i];
+      i++;
+    } else {
+      clA[k] = clT[j];
+      j++;
+    }
+    k++;
+  }
+  while (i < contCliente) {
+    clA[k] = cl[i];
+    i++;
+    k++;
+  }
+
+  while (j < contClienteT) {
+    clA[k] = clT[j];
+    j++;
+    k++;
+  }
+  contClienteA = k;
 }
