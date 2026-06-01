@@ -44,6 +44,7 @@ void searchCidade(Cidade c[], int id);
 void searchCliente(Cliente cl[], int &exist, int id);
 void includeCliente(Cliente cl[], Cliente clT[], Cliente clA[], int contCliente,
                     int contClienteT, int contClienteA);
+void searchVeiculo(Veiculo v[], int exist, string id);
 
 // Protótipos
 
@@ -191,7 +192,7 @@ void setVeiculo(Veiculo v[], Cliente cl[], int &cont) {
       cout << "ID Já Existente na tabela!" << endl;
       break;
     }
-    if (v[cont].id == 0) {
+    if (v[cont].placa == "") {
       break;
     } else {
       cout << "Digite o Modelo do Veículo: " << endl;
