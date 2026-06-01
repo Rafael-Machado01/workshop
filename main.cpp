@@ -33,6 +33,11 @@ struct Veiculo {
   string placa, modelo, marca;
 };
 
+struct Mecanico {
+  int id, telefone;
+  string nome, especialidade;
+};
+
 // Structs
 
 // Protótipos
@@ -44,17 +49,19 @@ void searchCidade(Cidade c[], int id);
 void searchCliente(Cliente cl[], int &exist, int id);
 void includeCliente(Cliente cl[], Cliente clT[], Cliente clA[], int contCliente,
                     int contClienteT, int contClienteA);
-void searchVeiculo(Veiculo v[], int exist, string id);
+void searchVeiculo(Veiculo v[], int &exist, string id);
+void searchMecanico(Mecanico m[], int &exist, int id)
 
-// Protótipos
+    // Protótipos
 
-int main() {
+    int main() {
   // Structs
 
   Cidade c[T];
   Servico s[T];
   Peca p[T];
   Cliente cl[T], clT[T], clA[T];
+  Mecanico m[T];
 
   // Structs
 
@@ -182,8 +189,8 @@ void includeCliente(Cliente cl[], Cliente clT[], Cliente clA[], int contCliente,
 }
 
 void setVeiculo(Veiculo v[], Cliente cl[], int &cont) {
-  cont = 0;
-  while (cont < T) {
+  cont = 1;
+  while (cont < T or cont == 0) {
     cout << "Digite a Placa do Veículo: (0 para sair): " << endl;
     cin >> v[cont].placa;
     int exist = 0;
@@ -208,7 +215,7 @@ void setVeiculo(Veiculo v[], Cliente cl[], int &cont) {
   }
 }
 
-void searchVeiculo(Veiculo v[], int exist, string id) {
+void searchVeiculo(Veiculo v[], int &exist, string id) {
   int init = 0, end = T - 1, middle = 0;
   while (init <= end) {
     middle = (init + end) / 2;
@@ -223,3 +230,77 @@ void searchVeiculo(Veiculo v[], int exist, string id) {
     }
   }
 }
+
+void setMecanico(Mecanico m[]) {
+  int cont = 1;
+  while (cont < T or cont == 0) {
+    cout << "Digite o ID do Mecanico (0 para sair):" << endl;
+    cin >> m[cont].id;
+    int exist = 0;
+    searchMecanico(m, exist, m[cont].id);
+    if (exist !=) {
+      cout << "ID Já Existente!" << endl;
+    } else {
+      cout << "Digite o Nome do Mecanico:" << endl;
+      cin.ignore();
+      getline(cin, m[cont].nome);
+      cout << "Digete a Especialidade do Mecanico:" << endl;
+      getline(cin, m[cont].especialidade);
+      cout << "Digite o Telefone do Mecanico:" << endl;
+      cin >> m[cont].telefone;
+    }
+  }
+}
+
+void searchMecanico(Mecanico m[], int exist, int id) {
+  int init = 0, end = T - 1, middle = 0;
+  while (init <= end) {
+    middle = (init + end) / 2;
+    if (m[middle].id > id) {
+      end = middle - 1;
+    } else if (m[middle].id < id) {
+      init = middle + 1;
+    } else {
+      exist = 1;
+      break;
+    }
+  }
+
+  void includeMecanico(Mecanico m[], int contS, Mecanico mT[], int contT,
+                       Mecanico mA[], int &contA) {
+
+    int i = 0;
+    int j = 0;
+    int k = 0;
+
+    // enquanto existir elementos nos dois vetores
+    while (i < contS && j < contT) {
+
+      // pega o menor codigo
+      if (S[i].codigo < T[j].codigo) {
+        A[k] = S[i];
+        i++;
+      } else {
+        A[k] = T[j];
+        j++;
+      }
+
+      k++;
+    }
+
+    // copia resto de S
+    while (i < contS) {
+      A[k] = S[i];
+      i++;
+      k++;
+    }
+
+    // copia resto de T
+    while (j < contT) {
+      A[k] = T[j];
+      j++;
+      k++;
+    }
+
+    contA = k;
+  }
