@@ -12,6 +12,7 @@
 
 1. Escreva funções específicas para a leitura dos dados das estruturas: Cidades, Serviços e Peças.
 
+
 2. Escreva uma função para permitir a inclusão de novos registros na tabela de Clientes.
 
 - 2.1) O programa deverá garantir que o código do cliente a ser inserido não existe na tabela de Clientes.

@@ -8,6 +8,7 @@ void setCliente(Cliente cl[], Cidade c[], int &cont) {
     int exist = 0;
     searchCliente(cl, exist, cl[cont].id);
     if (exist == 1) {
+      break;
       cout << "ID Já Existente na tabela!" << endl;
       break;
     }

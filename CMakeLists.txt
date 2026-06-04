@@ -12,8 +12,8 @@ add_executable(oficina
         snippts/set.cpp
         main.cpp
         snippts/dados_mocado.cpp
-        snippts/questoes/one.cpp
         snippts/questoes/two.cpp
         snippts/questoes/three.cpp
         menu.cpp
+        snippts/bobleshort.cpp
 )
