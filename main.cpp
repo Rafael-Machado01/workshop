@@ -1,306 +1,179 @@
 #include <iostream>
-#include <string>
 using namespace std;
 
-#define T 2
-
-// Structs
+#define T 5
 
 struct Cidade {
-  int id;
-  string nome, uf;
+    int id;
+    string nome, uf;
 };
-
 struct Servico {
-  int id;
-  string descricao;
-  float valorMaoDeObra;
+    int id;
+    string descricao;
+    float valorMaoDeObra;
 };
-
 struct Peca {
-  int id, qtdeEstoque, minEstoque, maxEstoque;
-  string descricao;
-  float preco;
+    int id, qtdeEstoque, minEstoque, maxEstoque;
+    string descricao;
+    float preco;
 };
-
 struct Cliente {
-  int id, idCidade;
-  string nome, telefone, endereco;
+    int id, idCidade;
+    string nome, telefone, endereco;
 };
 
-struct Veiculo {
-  int ano, idCliente;
-  string placa, modelo, marca;
-};
 
-struct Mecanico {
-  int id, telefone;
-  string nome, especialidade;
-};
-
-// Structs
-
-// Protótipos
 void readCidade(Cidade c[]);
-void readServicos(Servico s[]);
+void readServico(Servico s[]);
 void readPeca(Peca p[]);
-void setCliente(Cliente cl[], Cidade c[], int &cont);
-void searchCidade(Cidade c[], int id);
-void searchCliente(Cliente cl[], int &exist, int id);
-void includeCliente(Cliente cl[], Cliente clT[], Cliente clA[], int contCliente,
-                    int contClienteT, int contClienteA);
-void searchVeiculo(Veiculo v[], int &exist, string id);
-void searchMecanico(Mecanico m[], int &exist, int id)
+void menu(Cidade c[],Servico s[],Peca p[]);
 
-    // Protótipos
+int main() {
+    Cidade c[T] = {
+        {1, "Assis", "SP"},
+        {2, "Marilia", "SP"},
+        {3, "Londrina", "PR"},
+        {4, "Presidente Prudente", "SP"},
+        {5, "Bauru", "SP"}
+    };
+    Servico s[T] = {
+        {1, "Troca de Oleo", 80.00},
+        {2, "Alinhamento", 120.00},
+        {3, "Balanceamento", 90.00},
+        {4, "Revisao Completa", 350.00},
+        {5, "Troca de Pastilhas de Freio", 150.00}
+    };
+    Peca p[T] = {
+        {1, 20, 5, 50, "Filtro de Oleo", 35.90},
+        {2, 15, 3, 30, "Pastilha de Freio", 89.90},
+        {3, 10, 2, 20, "Bateria 60Ah", 420.00},
+        {4, 25, 5, 40, "Vela de Ignicao", 18.50},
+        {5, 8, 2, 15, "Correia Dentada", 150.00}
+    };
+    Cliente cl[T] = {
+        {1, 1, "Joao Silva", "18998112233", "Rua das Flores, 120"},
+        {2, 2, "Maria Souza", "14999774455", "Av. Brasil, 450"},
+        {3, 3, "Carlos Lima", "43988776655", "Rua Parana, 88"},
+        {4, 4, "Ana Oliveira", "18999443322", "Rua Central, 210"},
+        {5, 5, "Pedro Santos", "14998552211", "Av. Paulista, 75"}
+    };
+    menu(c,s,p);
+}
 
-    int main() {
-  // Structs
+void menu(Cidade c[],Servico s[], Peca p[]) {
+    int opMain = -1;
 
-  Cidade c[T];
-  Servico s[T];
-  Peca p[T];
-  Cliente cl[T], clT[T], clA[T];
-  Mecanico m[T];
+    while (opMain != 0) {
+        cout << "\n\n\t\tMenu Principal - Racing Fema" << endl;
+        cout << "\n1 - Imprimir";
+        cout << "\n2 - Incluir";
+        cout << "\n3 - Funcoes";
+        cout << "\n0 - Sair";
+        cout << "\n\nEscolha uma opcao: ";
+        cin >> opMain;
 
-  // Structs
+        switch (opMain) {
+            case 1: {
+                int opSecond = -1;
 
-  // Variables
-  int contCliente = 0, contClienteT = 0, contClienteA = 0;
-  // Variables
-  setCliente(cl, c, contCliente);
-  includeCliente(cl, clT, clA, contCliente, contClienteT, contClienteA);
+                while (opSecond != 0) {
+                    cout << "\n\n\t\tMenu Imprimir - Racing Fema" << endl;
+                    cout << "\n1 - Cidades";
+                    cout << "\n2 - Servicos";
+                    cout << "\n3 - Pecas";
+                    cout << "\n0 - Voltar";
+                    cout << "\n\nEscolha uma opcao: ";
+                    cin >> opSecond;
+
+                    switch (opSecond) {
+                        case 1:
+                            readCidade(c);
+                            break;
+                        case 2:
+                            readServico(s);
+                            break;
+                        case 3:
+                            readPeca(p);
+                            break;
+                        case 0:
+                            cout << "\nVoltando..." << endl;
+                            break;
+                        default:
+                            cout << "\nOpcao invalida!" << endl;
+                    }
+                }
+                break;
+            }
+
+            case 2: {
+                int opSecond = -1;
+
+                while (opSecond != 0) {
+                    cout << "\n\n\t\tMenu Incluir - Racing Fema" << endl;
+                    cout << "\n1 - Cliente";
+                    cout << "\n2 - Veiculo";
+                    cout << "\n3 - Mecanico";
+                    cout << "\n0 - Voltar";
+                    cout << "\n\nEscolha uma opcao: ";
+                    cin >> opSecond;
+
+                    switch (opSecond) {
+                        case 1:
+                            cout << "Incluir Cliente\n";
+                            break;
+                        case 2:
+                            cout << "Incluir Veiculo\n";
+                            break;
+                        case 3:
+                            cout << "Incluir Mecanico\n";
+                            break;
+                        case 0:
+                            cout << "Voltando...\n";
+                            break;
+                        default:
+                            cout << "Opcao invalida!\n";
+                    }
+                }
+                break;
+            }
+
+            case 3:
+                cout << "\nMenu de funcoes\n";
+                break;
+
+            case 0:
+                cout << "\nFechando programa...\n";
+                break;
+
+            default:
+                cout << "\nOpcao invalida!\n";
+        }
+    }
 }
 
 void readCidade(Cidade c[]) {
-  for (int i = 0; i < T; i++) {
-    cout << "ID: " << c[i].id << endl;
-    cout << "Nome: " << c[i].nome << endl;
-    cout << "UF: " << c[i].uf << endl;
-  }
+    for (int i = 0; i < T; i++) {
+        cout << "ID: " << c[i].id << endl;
+        cout << "Nome: " << c[i].nome << endl;
+        cout << "UF: " << c[i].uf << endl;
+    }
 }
 
-void readServicos(Servico s[]) {
-  for (int i = 0; i < T; i++) {
-    cout << "ID: " << s[i].id << endl;
-    cout << "Descrição: " << s[i].descricao << endl;
-    cout << "Valor de Mão de Obra: " << s[i].valorMaoDeObra << endl;
-  }
+void readServico(Servico s[]) {
+    for (int i = 0; i < T; i++) {
+        cout << "ID: " << s[i].id << endl;
+        cout << "Descrição: " << s[i].descricao << endl;
+        cout << "Valor de Mão de Obra: " << s[i].valorMaoDeObra << endl;
+    }
 }
 
 void readPeca(Peca p[]) {
-  for (int i = 0; i < T; i++) {
-    cout << "ID:" << p[i].id << endl;
-    cout << "Descrição: " << p[i].descricao << endl;
-    cout << "Quantidade em Estoque: " << p[i].qtdeEstoque << endl;
-    cout << "Quantidade Mínima: " << p[i].minEstoque << endl;
-    cout << "Quantidade Maxíma: " << p[i].maxEstoque << endl;
-    cout << "Preço Unitário: " << p[i].preco << endl;
-  }
+    for (int i = 0; i < T; i++) {
+        cout << "ID:" << p[i].id << endl;
+        cout << "Descrição: " << p[i].descricao << endl;
+        cout << "Quantidade em Estoque: " << p[i].qtdeEstoque << endl;
+        cout << "Quantidade Mínima: " << p[i].minEstoque << endl;
+        cout << "Quantidade Maxíma: " << p[i].maxEstoque << endl;
+        cout << "Preço Unitário: " << p[i].preco << endl;
+    }
 }
-
-void setCliente(Cliente cl[], Cidade c[], int &cont) {
-  cont = 0;
-
-  while (cont < T) {
-    cout << "Digite o ID do Cliente (0 para sair): " << endl;
-    cin >> cl[cont].id;
-    int exist = 0;
-    searchCliente(cl, exist, cl[cont].id);
-    if (exist == 1) {
-      cout << "ID Já Existente na tabela!" << endl;
-      break;
-    }
-    if (cl[cont].id == 0) {
-      break;
-    } else {
-      cout << "Digite o Nome do Cliente: " << endl;
-      cin.ignore();
-      getline(cin, cl[cont].nome);
-      cout << "Digite o Endereço do Cliente: " << endl;
-      getline(cin, cl[cont].endereco);
-      cout << "Digite o Telefone do Cliente:" << endl;
-      cin >> cl[cont].telefone;
-      cout << "Digite o ID da Cidade:" << endl;
-      cin >> cl[cont].idCidade;
-      searchCidade(c, cl[cont].idCidade);
-      cont++;
-    }
-  }
-}
-
-void searchCidade(Cidade c[], int id) {
-  int init = 0, end = T - 1, middle = 0;
-  while (init <= end) {
-    middle = (init + end) / 2;
-    if (c[middle].id > id) {
-      end = middle - 1;
-    } else if (c[middle].id < id) {
-      init = middle + 1;
-    } else {
-      cout << "Nome: " << c[middle].nome << " UF: " << c[middle].uf << endl;
-      break;
-    }
-  }
-}
-
-void searchCliente(Cliente cl[], int &exist, int id) {
-  int init = 0, end = T - 1, middle = 0;
-  while (init <= end) {
-    middle = (init + end) / 2;
-    if (cl[middle].id > id) {
-      end = middle - 1;
-    } else if (cl[middle].id < id) {
-      init = middle + 1;
-    } else {
-      exist = 1;
-      cout << "Cliente encontrado!" << endl;
-      cout << "Nome: " << cl[middle].nome << endl;
-    }
-  }
-}
-
-void includeCliente(Cliente cl[], Cliente clT[], Cliente clA[], int contCliente,
-                    int contClienteT, int &contClienteA) {
-  int i = 0, j = 0, k = 0;
-
-  while (i < contCliente and j < contClienteT) {
-    if (cl[i].id < clT[i].id) {
-      clA[k] = cl[i];
-      i++;
-    } else {
-      clA[k] = clT[j];
-      j++;
-    }
-    k++;
-  }
-  while (i < contCliente) {
-    clA[k] = cl[i];
-    i++;
-    k++;
-  }
-
-  while (j < contClienteT) {
-    clA[k] = clT[j];
-    j++;
-    k++;
-  }
-  contClienteA = k;
-}
-
-void setVeiculo(Veiculo v[], Cliente cl[], int &cont) {
-  cont = 1;
-  while (cont < T or cont == 0) {
-    cout << "Digite a Placa do Veículo: (0 para sair): " << endl;
-    cin >> v[cont].placa;
-    int exist = 0;
-    searchVeiculo(v, exist, v[cont].placa);
-    if (exist == 1) {
-      cout << "ID Já Existente na tabela!" << endl;
-      break;
-    }
-    if (v[cont].placa == "") {
-      break;
-    } else {
-      cout << "Digite o Modelo do Veículo: " << endl;
-      getline(cin, v[cont].modelo);
-      cout << "Digite a Marca do Veículo: " << endl;
-      getline(cin, v[cont].marca);
-      cout << "Digite o Ano do Veículo: " << endl;
-      cin >> v[cont].ano;
-      cout << "Digite o ID do Cliente: " << endl;
-      cin >> v[cont].idCliente;
-      searchCliente(cl, exist, v[cont].idCliente);
-    }
-  }
-}
-
-void searchVeiculo(Veiculo v[], int &exist, string id) {
-  int init = 0, end = T - 1, middle = 0;
-  while (init <= end) {
-    middle = (init + end) / 2;
-    if (v[middle].placa > id) {
-      end = middle - 1;
-    } else if (v[middle].placa < id) {
-      init = middle + 1;
-    } else {
-      exist = 1;
-      cout << "Placa já cadastrada!" << endl;
-      cout << "Modelo: " << v[middle].modelo << endl;
-    }
-  }
-}
-
-void setMecanico(Mecanico m[]) {
-  int cont = 1;
-  while (cont < T or cont == 0) {
-    cout << "Digite o ID do Mecanico (0 para sair):" << endl;
-    cin >> m[cont].id;
-    int exist = 0;
-    searchMecanico(m, exist, m[cont].id);
-    if (exist !=) {
-      cout << "ID Já Existente!" << endl;
-    } else {
-      cout << "Digite o Nome do Mecanico:" << endl;
-      cin.ignore();
-      getline(cin, m[cont].nome);
-      cout << "Digete a Especialidade do Mecanico:" << endl;
-      getline(cin, m[cont].especialidade);
-      cout << "Digite o Telefone do Mecanico:" << endl;
-      cin >> m[cont].telefone;
-    }
-  }
-}
-
-void searchMecanico(Mecanico m[], int exist, int id) {
-  int init = 0, end = T - 1, middle = 0;
-  while (init <= end) {
-    middle = (init + end) / 2;
-    if (m[middle].id > id) {
-      end = middle - 1;
-    } else if (m[middle].id < id) {
-      init = middle + 1;
-    } else {
-      exist = 1;
-      break;
-    }
-  }
-
-  void includeMecanico(Mecanico m[], int contS, Mecanico mT[], int contT,
-                       Mecanico mA[], int &contA) {
-
-    int i = 0;
-    int j = 0;
-    int k = 0;
-
-    // enquanto existir elementos nos dois vetores
-    while (i < contS && j < contT) {
-
-      // pega o menor codigo
-      if (S[i].codigo < T[j].codigo) {
-        A[k] = S[i];
-        i++;
-      } else {
-        A[k] = T[j];
-        j++;
-      }
-
-      k++;
-    }
-
-    // copia resto de S
-    while (i < contS) {
-      A[k] = S[i];
-      i++;
-      k++;
-    }
-
-    // copia resto de T
-    while (j < contT) {
-      A[k] = T[j];
-      j++;
-      k++;
-    }
-
-    contA = k;
-  }
