@@ -29,19 +29,23 @@ struct Mecanico {
     int id;
     string telefone, nome, especialidade;
 };
-
+struct Ordem {
+    int id,idMecanico,idServico,idPeca,qtdePeca;
+    string vPlaca,data;
+};
 
 
 void readCidade(Cidade c[]);
 void readServico(Servico s[]);
 void readPeca(Peca p[]);
-void readCliente(Cliente cl[], int &sizeCliente);
-void readVeiculo(Veiculo v[],int &sizeVeiculo);
-void readMecanico(Mecanico m[],int &sizeMecanico);
+void readCliente(Cliente cl[], int sizeCliente);
+void readVeiculo(Veiculo v[],int sizeVeiculo);
+void readMecanico(Mecanico m[],int sizeMecanico);
+void readOrdem(Ordem o[],int sizeOrdem);
 void searchCliente(Cliente cl[],int sizeCliente,bool &exist,int x);
 void searchCidade(Cidade c[],int idCidade);
-void searchVeiculo(Veiculo v[], int &sizeVeiculo, string x,bool &exist);
-void searchMecanico(Mecanico m[],int &sizeMecanico,bool &exist, int x);
+void searchVeiculo(Veiculo v[], int sizeVeiculo, string x,bool &exist);
+void searchMecanico(Mecanico m[],int sizeMecanico,bool &exist, int x);
 void mergeCliente(Cliente cl[],int &sizeCliente, Cliente clT[],int &cont,Cliente clA[]);
 void newCliente(Cliente cl[],Cliente clT[], Cliente clA[],int &sizeCliente,Cidade c[]);
 void newVeiculo(Veiculo v[], int &sizeVeiculo,Cliente cl[], int &sizeCliente,Veiculo vT[],Veiculo vA[]);
@@ -49,7 +53,7 @@ void mergeVeiculo(Veiculo v[],int &sizeVeiculo, Veiculo vT[],int &cont,Veiculo v
 void newMecanico(Mecanico m[],int &sizeMecanico,Mecanico mT[],Mecanico mA[]);
 void mergeMecanico(Mecanico m[],int &sizeMecanico,Mecanico mT[],int &cont,Mecanico mA[]);
 
-void menu(Cidade c[],Servico s[],Peca p[],Cliente cl[],int &sizeCliente,Cliente clT[],Cliente clA[],Veiculo v[],int &sizeVeiculo,Veiculo vT[],Veiculo vA[],Mecanico m[],int &sizeMecanico,Mecanico mT[],Mecanico mA[]);
+void menu(Cidade c[],Servico s[],Peca p[],Cliente cl[],int &sizeCliente,Cliente clT[],Cliente clA[],Veiculo v[],int &sizeVeiculo,Veiculo vT[],Veiculo vA[],Mecanico m[],int &sizeMecanico,Mecanico mT[],Mecanico mA[],Ordem o[],int &sizeOrdem);
 
 int main() {
     Cidade c[T] = {
@@ -100,10 +104,18 @@ int main() {
     };
     Mecanico mT[T*2],mA[T*2];
     int sizeMecanico = T;
-    menu(c,s,p,cl,sizeCliente,clT,clA,v,sizeVeiculo,vT,vA,m,sizeMecanico,mT,mA);
+    Ordem o[T * 2] = {
+        {1, 1, 1, 1, 1, "ABC1D23", "10/05/2026"},
+        {2, 2, 2, 4, 4, "DEF4G56", "12/05/2026"},
+        {3, 3, 5, 2, 2, "HIJ7K89", "15/05/2026"},
+        {4, 4, 4, 3, 1, "LMN1O23", "18/05/2026"},
+        {5, 5, 3, 5, 1, "PQR4S56", "20/05/2026"}
+    };
+    int sizeOrdem = T;
+    menu(c,s,p,cl,sizeCliente,clT,clA,v,sizeVeiculo,vT,vA,m,sizeMecanico,mT,mA,o,sizeOrdem);
 }
 
-void menu(Cidade c[],Servico s[],Peca p[],Cliente cl[],int &sizeCliente,Cliente clT[],Cliente clA[],Veiculo v[],int &sizeVeiculo,Veiculo vT[],Veiculo vA[],Mecanico m[],int &sizeMecanico,Mecanico mT[],Mecanico mA[]) {
+void menu(Cidade c[],Servico s[],Peca p[],Cliente cl[],int &sizeCliente,Cliente clT[],Cliente clA[],Veiculo v[],int &sizeVeiculo,Veiculo vT[],Veiculo vA[],Mecanico m[],int &sizeMecanico,Mecanico mT[],Mecanico mA[],Ordem o[],int &sizeOrdem) {
     int opMain = -1;
 
     while (opMain != 0) {
@@ -127,6 +139,7 @@ void menu(Cidade c[],Servico s[],Peca p[],Cliente cl[],int &sizeCliente,Cliente 
                     cout << "\n4 - Clientes";
                     cout << "\n5 - Veiculos";
                     cout << "\n6 - Mecanicos";
+                    cout << "\n7 - Ordens de Serviço";
                     cout << "\n0 - Voltar";
                     cout << "\n\nEscolha uma opcao: ";
                     cin >> opSecond;
@@ -149,6 +162,8 @@ void menu(Cidade c[],Servico s[],Peca p[],Cliente cl[],int &sizeCliente,Cliente 
                             break;
                         case 6:
                             readMecanico(m,sizeMecanico);
+                        case 7:
+                            readOrdem(o,sizeOrdem);
                         case 0:
                             cout << "\nVoltando..." << endl;
                             break;
@@ -232,7 +247,7 @@ void readPeca(Peca p[]) {
     }
 }
 
-void readCliente(Cliente cl[], int &sizeCliente) {
+void readCliente(Cliente cl[], int sizeCliente) {
     for (int i = 0; i < sizeCliente; i++) {
         cout << "ID: " << cl[i].id << endl;
         cout << "Nome: " << cl[i].nome << endl;
@@ -242,7 +257,7 @@ void readCliente(Cliente cl[], int &sizeCliente) {
     }
 }
 
-void readVeiculo(Veiculo v[],int &sizeVeiculo) {
+void readVeiculo(Veiculo v[],int sizeVeiculo) {
     for (int i=0; i < sizeVeiculo; i++) {
         cout << "Placa: " << v[i].placa << endl;
         cout << "Modelo: " << v[i].modelo << endl;
@@ -252,12 +267,24 @@ void readVeiculo(Veiculo v[],int &sizeVeiculo) {
     }
 }
 
-void readMecanico(Mecanico m[], int &sizeVeiculo) {
+void readMecanico(Mecanico m[], int sizeVeiculo) {
     for (int i=0; i < sizeVeiculo; i++) {
         cout << "ID: " << m[i].id << endl;
         cout << "Nome: " << m[i].nome << endl;
         cout << "Telefone: " << m[i].telefone << endl;
         cout << "Especialidade: " << m[i].especialidade << endl;
+    }
+}
+
+void readOrdem(Ordem o[],int sizeOrdem) {
+    for (int i=0; i < sizeOrdem; i++) {
+        cout << "ID: " << o[i].id << endl;
+        cout << "Placa do Veiculo: " << o[i].vPlaca << endl;
+        cout << "ID do Mecanico: " << o[i].idMecanico << endl;
+        cout << "Data: " << o[i].data << endl;
+        cout << "ID do Serviço: " << o[i].idServico << endl;
+        cout << "ID da Peça: " << o[i].idPeca << endl;
+        cout << "Quantidade de Peça: " << o[i].qtdePeca << endl;
     }
 }
 
@@ -391,8 +418,7 @@ void searchCliente(Cliente cl[],int sizeCliente,bool &exist, int x) {
             end = middle - 1;
         }else if (cl[middle].id < x) {
             init = middle + 1;
-        }if (cl[middle].id == x) {
-            cout << "Cliente já existente!" << endl;
+        }else {
             cout << "ID: " << cl[middle].id << " Nome: " << cl[middle].nome << endl;
             exist = true;
             break;
@@ -408,7 +434,7 @@ void searchCidade(Cidade c[],int idCidade) {
             end = middle - 1;
         }else if (c[middle].id < idCidade) {
             init = middle + 1;
-        }if (c[middle].id == idCidade) {
+        }else {
             cout << "ID: " << c[middle].id << " Nome: " << c[middle].nome << " UF: " << c[middle].uf << endl;
             break;
         }
@@ -416,7 +442,7 @@ void searchCidade(Cidade c[],int idCidade) {
     }
 }
 
-void searchVeiculo(Veiculo v[], int &sizeVeiculo, string x,bool &exist) {
+void searchVeiculo(Veiculo v[], int sizeVeiculo, string x,bool &exist) {
     int init=0,end = sizeVeiculo-1,middle = 0;
     while (init <= end) {
         middle = (init + end) / 2;
@@ -424,7 +450,7 @@ void searchVeiculo(Veiculo v[], int &sizeVeiculo, string x,bool &exist) {
             end = middle - 1;
         }else if (v[middle].placa < x) {
             init = middle + 1;
-        }if (v[middle].placa == x) {
+        }else  {
             cout << "Placa já Cadrastrada" << endl;
             exist = true;
             break;
@@ -433,7 +459,7 @@ void searchVeiculo(Veiculo v[], int &sizeVeiculo, string x,bool &exist) {
     }
 }
 
-void searchMecanico(Mecanico m[],int &sizeMecanico,bool &exist, int x) {
+void searchMecanico(Mecanico m[],int sizeMecanico,bool &exist, int x) {
     int init=0,end = sizeMecanico-1,middle = 0;
     while (init <= end) {
         middle = (init + end) / 2;
@@ -443,7 +469,7 @@ void searchMecanico(Mecanico m[],int &sizeMecanico,bool &exist, int x) {
         else if (m[middle].id < x) {
             init = middle + 1;
         }
-        if (m[middle].id == x) {
+        else {
             cout << "Mecanico encontrado!" << endl;
             cout << "ID: " << m[middle].id << " Nome: " << m[middle].nome << endl;
             exist = true;
