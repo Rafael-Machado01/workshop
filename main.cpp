@@ -25,23 +25,31 @@ struct Veiculo {
     int ano, idCliente;
     string placa, modelo, marca;
 };
+struct Mecanico {
+    int id;
+    string telefone, nome, especialidade;
+};
 
 
 
-void readCidade(Cidade c[],int &sizeCliente);
+void readCidade(Cidade c[]);
 void readServico(Servico s[]);
 void readPeca(Peca p[]);
 void readCliente(Cliente cl[], int &sizeCliente);
 void readVeiculo(Veiculo v[],int &sizeVeiculo);
+void readMecanico(Mecanico m[],int &sizeMecanico);
 void searchCliente(Cliente cl[],int sizeCliente,bool &exist,int x);
 void searchCidade(Cidade c[],int idCidade);
 void searchVeiculo(Veiculo v[], int &sizeVeiculo, string x,bool &exist);
+void searchMecanico(Mecanico m[],int &sizeMecanico,bool &exist, int x);
 void mergeCliente(Cliente cl[],int &sizeCliente, Cliente clT[],int &cont,Cliente clA[]);
 void newCliente(Cliente cl[],Cliente clT[], Cliente clA[],int &sizeCliente,Cidade c[]);
 void newVeiculo(Veiculo v[], int &sizeVeiculo,Cliente cl[], int &sizeCliente,Veiculo vT[],Veiculo vA[]);
 void mergeVeiculo(Veiculo v[],int &sizeVeiculo, Veiculo vT[],int &cont,Veiculo vA[]);
+void newMecanico(Mecanico m[],int &sizeMecanico,Mecanico mT[],Mecanico mA[]);
+void mergeMecanico(Mecanico m[],int &sizeMecanico,Mecanico mT[],int &cont,Mecanico mA[]);
 
-void menu(Cidade c[],Servico s[],Peca p[],Cliente cl[],int &sizeCliente,Cliente clT[],Cliente clA[],Veiculo v[],int &sizeVeiculo,Veiculo vT[],Veiculo vA[]);
+void menu(Cidade c[],Servico s[],Peca p[],Cliente cl[],int &sizeCliente,Cliente clT[],Cliente clA[],Veiculo v[],int &sizeVeiculo,Veiculo vT[],Veiculo vA[],Mecanico m[],int &sizeMecanico,Mecanico mT[],Mecanico mA[]);
 
 int main() {
     Cidade c[T] = {
@@ -83,10 +91,19 @@ int main() {
     };
     Veiculo vT[T*2],vA[T*2];
     int sizeVeiculo=T;
-    menu(c,s,p,cl,sizeCliente,clT,clA,v,sizeVeiculo,vT,vA);
+    Mecanico m[T*2] = {
+        {1, "18998123456", "Carlos Mendes", "Motor"},
+        {2, "14999765432", "Fernanda Rocha", "Suspensao"},
+        {3, "43998887766", "Juliano Martins", "Freios"},
+        {4, "18999445566", "Patricia Lima", "Eletrica Automotiva"},
+        {5, "14998553322", "Ricardo Nogueira", "Injecao Eletronica"}
+    };
+    Mecanico mT[T*2],mA[T*2];
+    int sizeMecanico = T;
+    menu(c,s,p,cl,sizeCliente,clT,clA,v,sizeVeiculo,vT,vA,m,sizeMecanico,mT,mA);
 }
 
-void menu(Cidade c[],Servico s[],Peca p[],Cliente cl[],int &sizeCliente,Cliente clT[],Cliente clA[],Veiculo v[],int &sizeVeiculo,Veiculo vT[],Veiculo vA[]) {
+void menu(Cidade c[],Servico s[],Peca p[],Cliente cl[],int &sizeCliente,Cliente clT[],Cliente clA[],Veiculo v[],int &sizeVeiculo,Veiculo vT[],Veiculo vA[],Mecanico m[],int &sizeMecanico,Mecanico mT[],Mecanico mA[]) {
     int opMain = -1;
 
     while (opMain != 0) {
@@ -109,13 +126,14 @@ void menu(Cidade c[],Servico s[],Peca p[],Cliente cl[],int &sizeCliente,Cliente 
                     cout << "\n3 - Pecas";
                     cout << "\n4 - Clientes";
                     cout << "\n5 - Veiculos";
+                    cout << "\n6 - Mecanicos";
                     cout << "\n0 - Voltar";
                     cout << "\n\nEscolha uma opcao: ";
                     cin >> opSecond;
 
                     switch (opSecond) {
                         case 1:
-                            readCidade(c,sizeCliente);
+                            readCidade(c);
                             break;
                         case 2:
                             readServico(s);
@@ -129,6 +147,8 @@ void menu(Cidade c[],Servico s[],Peca p[],Cliente cl[],int &sizeCliente,Cliente 
                         case 5:
                             readVeiculo(v,sizeVeiculo);
                             break;
+                        case 6:
+                            readMecanico(m,sizeMecanico);
                         case 0:
                             cout << "\nVoltando..." << endl;
                             break;
@@ -159,7 +179,7 @@ void menu(Cidade c[],Servico s[],Peca p[],Cliente cl[],int &sizeCliente,Cliente 
                             newVeiculo(v,sizeVeiculo,cl,sizeCliente,vT,vA);
                             break;
                         case 3:
-                            cout << "Incluir Mecanico\n";
+                            newMecanico(m,sizeMecanico,mT,mA);
                             break;
                         case 0:
                             cout << "Voltando...\n";
@@ -185,8 +205,8 @@ void menu(Cidade c[],Servico s[],Peca p[],Cliente cl[],int &sizeCliente,Cliente 
     }
 }
 
-void readCidade(Cidade c[],int &sizeCliente) {
-    for (int i = 0; i < sizeCliente; i++) {
+void readCidade(Cidade c[]) {
+    for (int i = 0; i < T; i++) {
         cout << "ID: " << c[i].id << endl;
         cout << "Nome: " << c[i].nome << endl;
         cout << "UF: " << c[i].uf << endl;
@@ -229,6 +249,15 @@ void readVeiculo(Veiculo v[],int &sizeVeiculo) {
         cout << "Marca: " << v[i].marca << endl;
         cout << "Ano: " << v[i].ano << endl;
         cout << "Cliente: " << v[i].idCliente << endl;
+    }
+}
+
+void readMecanico(Mecanico m[], int &sizeVeiculo) {
+    for (int i=0; i < sizeVeiculo; i++) {
+        cout << "ID: " << m[i].id << endl;
+        cout << "Nome: " << m[i].nome << endl;
+        cout << "Telefone: " << m[i].telefone << endl;
+        cout << "Especialidade: " << m[i].especialidade << endl;
     }
 }
 
@@ -275,7 +304,7 @@ void newCliente(Cliente cl[],Cliente clT[], Cliente clA[],int &sizeCliente,Cidad
 void newVeiculo(Veiculo v[], int &sizeVeiculo,Cliente cl[], int &sizeCliente,Veiculo vT[],Veiculo vA[]) {
     string x="";
     int cont=0;
-    while (sizeVeiculo < T*2) {
+    while (cont < T*2) {
         bool exist=false;
         cout << "Digite a Placa do Veiculo: - 0 para sair " << endl;
         cin >> x;
@@ -284,6 +313,7 @@ void newVeiculo(Veiculo v[], int &sizeVeiculo,Cliente cl[], int &sizeCliente,Vei
         }
         if (x == "") {
             cout << "Placa Inválida" << endl;
+            break;
         }
         if (x == "0") {
             break;
@@ -315,6 +345,41 @@ void newVeiculo(Veiculo v[], int &sizeVeiculo,Cliente cl[], int &sizeCliente,Vei
         }
     }
     mergeVeiculo(v,sizeVeiculo,vT,cont,vA);
+}
+
+void newMecanico(Mecanico m[],int &sizeMecanico,Mecanico mT[],Mecanico mA[]) {
+    int x=0,cont=0;
+    while (cont < sizeMecanico) {
+        bool exist = false;
+        cout << "Digite o ID do Mecanico: - 0 para sair." << endl;
+        cin >> x;
+        if (x == 0) {
+            break;
+        }
+        searchMecanico(m,sizeMecanico,exist,x);
+        if (exist == false) {
+            mT[cont].id = x;
+            cout << "Digite o Nome do Mecanico: " << endl;
+            cin.ignore();
+            getline(cin,mT[cont].nome);
+            cout << "Digite o Telefone do Mecanico: " << endl;
+            getline(cin, mT[cont].telefone);
+            cout << "Digite a Especialidade do Mecanico: " << endl;
+            getline(cin, mT[cont].especialidade);
+        }
+        cont++;
+    }
+    for (int i=0; i < cont; i++) {
+        for (int j=i+1; j < cont; j++) {
+            if (mT[i].id > mT[j].id) {
+                Mecanico aux[1];
+                aux[0] = mT[i];
+                mT[i] =  mT[j];
+                mT[j] = aux[0];
+            }
+        }
+    }
+    mergeMecanico(m,sizeMecanico,mT,cont,mA);
 }
 
 
@@ -367,6 +432,26 @@ void searchVeiculo(Veiculo v[], int &sizeVeiculo, string x,bool &exist) {
         }
     }
 }
+
+void searchMecanico(Mecanico m[],int &sizeMecanico,bool &exist, int x) {
+    int init=0,end = sizeMecanico-1,middle = 0;
+    while (init <= end) {
+        middle = (init + end) / 2;
+        if (m[middle].id > x) {
+            end = middle - 1;
+        }
+        else if (m[middle].id < x) {
+            init = middle + 1;
+        }
+        if (m[middle].id == x) {
+            cout << "Mecanico encontrado!" << endl;
+            cout << "ID: " << m[middle].id << " Nome: " << m[middle].nome << endl;
+            exist = true;
+            break;
+        }
+    }
+}
+
 void mergeCliente(Cliente cl[],int &sizeCliente, Cliente clT[],int &cont,Cliente clA[]) {
     int i=0,j=0,a=0;
 
@@ -424,3 +509,33 @@ void mergeVeiculo(Veiculo v[],int &sizeVeiculo, Veiculo vT[],int &cont,Veiculo v
         v[i] = vA[i];
     }
 }
+
+void mergeMecanico(Mecanico v[],int &sizeMecanico, Mecanico mT[],int &cont,Mecanico mA[]) {
+    int i=0,j=0,a=0;
+
+    while (i < sizeMecanico and j < cont) {
+        if (v[i].id < mT[j].id) {
+            mA[a] = v[i];
+            i++;
+        }else {
+            mA[a] = mT[j];
+            j++;
+        }
+        a++;
+    }
+    while (i < sizeMecanico ) {
+        mA[a] = v[i];
+        i++;
+        a++;
+    }
+    while (j < cont) {
+        mA[a] = mT[j];
+        j++;
+        a++;
+    }
+    sizeMecanico = a;
+    for (int i=0; i < sizeMecanico; i++) {
+        v[i] = mA[i];
+    }
+}
+
