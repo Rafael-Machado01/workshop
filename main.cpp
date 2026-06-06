@@ -478,11 +478,11 @@ void newOrdem(Ordem o[],int &sizeOrdem,Cliente cl[], int sizeCliente,Veiculo v[]
             searchPeca(p,oT[cont].idPeca);
             cout << "Digite a Quantidade de Peças: " << endl;
             cin >> oT[cont].qtdePeca;
-            if (oT[cont].qtdePeca > p[oT[cont].idPeca].qtdeEstoque) {
+            if (oT[cont].qtdePeca > p[oT[cont].idPeca - 1].qtdeEstoque) {
                 cout << "Estoque Indisponivel" << endl;
                 break;
             }else {
-                p[o[cont].idPeca].qtdeEstoque -= oT[cont].qtdePeca;
+                p[o[cont].idPeca - 1].qtdeEstoque -= oT[cont].qtdePeca;
             }
             cont++;
         }
@@ -788,7 +788,7 @@ void money(Ordem o[], int &sizeOrdem, Peca p[],Servico s[]) {
     float total=0;
     for (int i=0; i < sizeOrdem; i++) {
         cout << "Ordem de servico ID: " << o[i].id << endl;
-        total +=  (o[i].qtdePeca * p[o[i].idPeca].preco) + s[o[i].idServico].valorMaoDeObra;
+        total +=  (o[i].qtdePeca * p[o[i].idPeca - 1].preco) + s[o[i].idServico - 1].valorMaoDeObra;
     }
     cout << "Total R$" << total << endl;
 }
