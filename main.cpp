@@ -44,16 +44,21 @@ void readMecanico(Mecanico m[],int sizeMecanico);
 void readOrdem(Ordem o[],int sizeOrdem);
 void searchCliente(Cliente cl[],int sizeCliente,bool &exist,int x);
 void searchCidade(Cidade c[],int idCidade);
-void searchVeiculo(Veiculo v[], int sizeVeiculo, string x,bool &exist);
+void searchVeiculo(Veiculo v[], int sizeVeiculo, string x,bool &exist,Cliente cl[],int sizeCliente);
 void searchMecanico(Mecanico m[],int sizeMecanico,bool &exist, int x);
+void searchOrdem(Ordem o[],int sizeOrdem,int x,bool &exist);
+void searchPeca(Peca p[]);
+void searchServico(Servico s[], int x);
+void searchPeca(Peca p[],int x);
 void mergeCliente(Cliente cl[],int &sizeCliente, Cliente clT[],int &cont,Cliente clA[]);
 void newCliente(Cliente cl[],Cliente clT[], Cliente clA[],int &sizeCliente,Cidade c[]);
 void newVeiculo(Veiculo v[], int &sizeVeiculo,Cliente cl[], int &sizeCliente,Veiculo vT[],Veiculo vA[]);
 void mergeVeiculo(Veiculo v[],int &sizeVeiculo, Veiculo vT[],int &cont,Veiculo vA[]);
 void newMecanico(Mecanico m[],int &sizeMecanico,Mecanico mT[],Mecanico mA[]);
 void mergeMecanico(Mecanico m[],int &sizeMecanico,Mecanico mT[],int &cont,Mecanico mA[]);
-
-void menu(Cidade c[],Servico s[],Peca p[],Cliente cl[],int &sizeCliente,Cliente clT[],Cliente clA[],Veiculo v[],int &sizeVeiculo,Veiculo vT[],Veiculo vA[],Mecanico m[],int &sizeMecanico,Mecanico mT[],Mecanico mA[],Ordem o[],int &sizeOrdem);
+void newOrdem(Ordem o[],int &sizeOrdem,Cliente cl[], int sizeCliente,Veiculo v[], int sizeVeiculo,Mecanico m[],int sizeMecanico, Servico s[],Peca p[],Ordem oT[],Ordem oA[]);
+void mergeOrdem(Ordem o[],int &sizeOrdem, Ordem oT[],int &cont,Ordem oA[]);
+void menu(Cidade c[],Servico s[],Peca p[],Cliente cl[],int &sizeCliente,Cliente clT[],Cliente clA[],Veiculo v[],int &sizeVeiculo,Veiculo vT[],Veiculo vA[],Mecanico m[],int &sizeMecanico,Mecanico mT[],Mecanico mA[],Ordem o[],int &sizeOrdem,Ordem oT[],Ordem oA[]);
 
 int main() {
     Cidade c[T] = {
@@ -112,10 +117,11 @@ int main() {
         {5, 5, 3, 5, 1, "PQR4S56", "20/05/2026"}
     };
     int sizeOrdem = T;
-    menu(c,s,p,cl,sizeCliente,clT,clA,v,sizeVeiculo,vT,vA,m,sizeMecanico,mT,mA,o,sizeOrdem);
+    Ordem oT[T*2],oA[T*2];
+    menu(c,s,p,cl,sizeCliente,clT,clA,v,sizeVeiculo,vT,vA,m,sizeMecanico,mT,mA,o,sizeOrdem,oT,oA);
 }
 
-void menu(Cidade c[],Servico s[],Peca p[],Cliente cl[],int &sizeCliente,Cliente clT[],Cliente clA[],Veiculo v[],int &sizeVeiculo,Veiculo vT[],Veiculo vA[],Mecanico m[],int &sizeMecanico,Mecanico mT[],Mecanico mA[],Ordem o[],int &sizeOrdem) {
+void menu(Cidade c[],Servico s[],Peca p[],Cliente cl[],int &sizeCliente,Cliente clT[],Cliente clA[],Veiculo v[],int &sizeVeiculo,Veiculo vT[],Veiculo vA[],Mecanico m[],int &sizeMecanico,Mecanico mT[],Mecanico mA[],Ordem o[],int &sizeOrdem,Ordem oT[],Ordem oA[]) {
     int opMain = -1;
 
     while (opMain != 0) {
@@ -162,8 +168,10 @@ void menu(Cidade c[],Servico s[],Peca p[],Cliente cl[],int &sizeCliente,Cliente 
                             break;
                         case 6:
                             readMecanico(m,sizeMecanico);
+                            break;
                         case 7:
                             readOrdem(o,sizeOrdem);
+                            break;
                         case 0:
                             cout << "\nVoltando..." << endl;
                             break;
@@ -206,10 +214,31 @@ void menu(Cidade c[],Servico s[],Peca p[],Cliente cl[],int &sizeCliente,Cliente 
                 break;
             }
 
-            case 3:
-                cout << "\nMenu de funcoes\n";
+            case 3: {
+                int opSecond = -1;
+                while (opSecond != 0) {
+                    cout << "\n\n\t\tMenu Funções - Racing Fema" << endl;
+                    cout << "\n1 - Abrir Ordem de Servico";
+                    cout << "\n2- Ler Peça";
+                    cout << "\n0 - Voltar";
+                    cout << "\n\nEscolha uma opcao: ";
+                    cin >> opSecond;
+                    switch (opSecond) {
+                        case 1:
+                            newOrdem(o,sizeOrdem,cl, sizeCliente,v, sizeVeiculo,m,sizeMecanico,s,p,oT,oA);
+                            break;
+                        case 2:
+                            searchPeca(p);
+                            break;
+                        case 0:
+                            cout << "Voltando...\n";
+                            break;
+                        default:
+                            cout << "Opcao invalida!\n";
+                    }
+                }
                 break;
-
+            }
             case 0:
                 cout << "\nFechando programa...\n";
                 break;
@@ -232,7 +261,7 @@ void readServico(Servico s[]) {
     for (int i = 0; i < T; i++) {
         cout << "ID: " << s[i].id << endl;
         cout << "Descrição: " << s[i].descricao << endl;
-        cout << "Valor de Mão de Obra: " << s[i].valorMaoDeObra << endl;
+        cout << "Valor de Mão de Obra: R$" << s[i].valorMaoDeObra << endl;
     }
 }
 
@@ -243,7 +272,7 @@ void readPeca(Peca p[]) {
         cout << "Quantidade em Estoque: " << p[i].qtdeEstoque << endl;
         cout << "Quantidade Mínima: " << p[i].minEstoque << endl;
         cout << "Quantidade Maxíma: " << p[i].maxEstoque << endl;
-        cout << "Preço Unitário: " << p[i].preco << endl;
+        cout << "Preço Unitário: R$" << p[i].preco << endl;
     }
 }
 
@@ -345,7 +374,7 @@ void newVeiculo(Veiculo v[], int &sizeVeiculo,Cliente cl[], int &sizeCliente,Vei
         if (x == "0") {
             break;
         }
-        searchVeiculo(v,sizeVeiculo, x,exist);
+        searchVeiculo(v,sizeVeiculo, x,exist,cl,sizeCliente);
         if (exist == false) {
             vT[cont].placa = x;
             cout << "Digite o Modelo: " << endl;
@@ -409,6 +438,58 @@ void newMecanico(Mecanico m[],int &sizeMecanico,Mecanico mT[],Mecanico mA[]) {
     mergeMecanico(m,sizeMecanico,mT,cont,mA);
 }
 
+void newOrdem(Ordem o[],int &sizeOrdem,Cliente cl[], int sizeCliente,Veiculo v[], int sizeVeiculo,Mecanico m[],int sizeMecanico, Servico s[],Peca p[],Ordem oT[],Ordem oA[]) {
+    int x=0,cont=0;
+    while (cont < sizeOrdem) {
+        bool exist = false;
+        cout << "Digite o ID da Ordem: -  0 para sair." << endl;
+        cin >> x;
+        if (x == 0 ) {
+            break;
+        }
+        searchOrdem(o,sizeOrdem,x,exist);
+        if (exist == false) {
+            oT[cont].id = x;
+            cout << "Digite a Placa do Veiculo: " << endl;
+            cin.ignore();
+            getline(cin,oT[cont].vPlaca);
+            searchVeiculo(v,sizeVeiculo,o[cont].vPlaca,exist,cl,sizeCliente);
+            cout << "Digite o ID do Mecanico: " << endl;
+            cin >> oT[cont].idMecanico;
+            searchMecanico(m,sizeMecanico,exist,o[cont].idMecanico);
+            cout << "Digite a Data: " << endl;
+            cin.ignore();
+            getline(cin,oT[cont].data);
+            cout << "Digite o ID do Serviço: " << endl;
+            cin >> oT[cont].idServico;
+            searchServico(s,o[cont].idServico);
+            cout << "Digite o ID da Peça: " << endl;
+            cin >> oT[cont].idPeca;
+            searchPeca(p,oT[cont].idPeca);
+            cout << "Digite a Quantidade de Peças: " << endl;
+            cin >> oT[cont].qtdePeca;
+            if (oT[cont].qtdePeca > p[oT[cont].idPeca].qtdeEstoque) {
+                cout << "Estoque Indisponivel" << endl;
+                break;
+            }else {
+                p[o[cont].idPeca].qtdeEstoque -= oT[cont].qtdePeca;
+            }
+            cont++;
+        }
+    }
+    for (int i=0; i < cont; i++) {
+        for (int j=i+1; j < cont; j++) {
+            if (oT[i].id > oT[j].id) {
+                Ordem aux[1];
+                aux[0] = oT[i];
+                oT[i] =  oT[j];
+                oT[j] = aux[0];
+            }
+        }
+    }
+    mergeOrdem(o,sizeOrdem,oT,cont,oA);
+}
+
 
 void searchCliente(Cliente cl[],int sizeCliente,bool &exist, int x) {
     int init=0,end = sizeCliente-1,middle=0;
@@ -442,7 +523,7 @@ void searchCidade(Cidade c[],int idCidade) {
     }
 }
 
-void searchVeiculo(Veiculo v[], int sizeVeiculo, string x,bool &exist) {
+void searchVeiculo(Veiculo v[], int sizeVeiculo, string x,bool &exist,Cliente cl[],int sizeCliente) {
     int init=0,end = sizeVeiculo-1,middle = 0;
     while (init <= end) {
         middle = (init + end) / 2;
@@ -451,7 +532,10 @@ void searchVeiculo(Veiculo v[], int sizeVeiculo, string x,bool &exist) {
         }else if (v[middle].placa < x) {
             init = middle + 1;
         }else  {
-            cout << "Placa já Cadrastrada" << endl;
+            cout << "Veiculo encontrado!" << endl;
+            cout << "Modelo: " << v[middle].modelo << endl;
+            cout << "Dono: " << endl;
+            searchCliente(cl,sizeCliente,exist,v[middle].idCliente);
             exist = true;
             break;
 
@@ -477,6 +561,85 @@ void searchMecanico(Mecanico m[],int sizeMecanico,bool &exist, int x) {
         }
     }
 }
+
+void searchOrdem(Ordem o[],int sizeOrdem,int x,bool &exist) {
+    int init=0,end = sizeOrdem-1,middle = 0;
+    while (init <= end) {
+        middle = (init + end) / 2;
+        if (o[middle].id > x) {
+            end = middle - 1;
+        }else if (o[middle].id < x) {
+            init = middle + 1;
+        }else {
+            cout << "Ordem Encontrada!" << endl;
+            cout << "ID: " << o[middle].id << endl;
+            exist = true;
+            break;
+        }
+    }
+}
+
+void searchServico(Servico s[], int x) {
+    int init=0,end = T-1,middle = 0;
+    while (init <= end) {
+        middle = (init + end) / 2;
+        if (s[middle].id > x) {
+            end = middle - 1;
+        }else if (s[middle].id < x) {
+            init = middle + 1;
+        }else {
+            cout << "Servico encontrado!" << endl;
+            cout << "Descrição: " << s[middle].descricao << "Valor de Mão de Obra R$" << s[middle].valorMaoDeObra << endl;
+            break;
+        }
+    }
+}
+
+
+void searchPeca(Peca p[]) {
+    int init=0,end = T-1,middle=0,x=0;
+    cout << "Digite o ID da Peça: 0 - Sair" << endl;
+    cin >> x;
+    if (x != 0) {
+        while (init <= end) {
+            middle = (init + end) / 2;
+            if (p[middle].id > x) {
+                end = middle - 1;
+            }else if (p[middle].id < x) {
+                init = middle + 1;
+            }else {
+                cout << "ID:" << p[middle].id << endl;
+                cout << "Descrição: " << p[middle].descricao << endl;
+                cout << "Quantidade em Estoque: " << p[middle].qtdeEstoque << endl;
+                cout << "Quantidade Mínima: " << p[middle].minEstoque << endl;
+                cout << "Quantidade Maxíma: " << p[middle].maxEstoque << endl;
+                cout << "Preço Unitário: R$" << p[middle].preco << endl;
+                cout << "Valor Total em Estoque: R$" << (p[middle].preco * p[middle].qtdeEstoque) << endl;
+                break;
+            }
+        }
+    }
+}
+void searchPeca(Peca p[],int x) {
+    int init=0,end = T-1,middle=0;
+        while (init <= end) {
+            middle = (init + end) / 2;
+            if (p[middle].id > x) {
+                end = middle - 1;
+            }else if (p[middle].id < x) {
+                init = middle + 1;
+            }else {
+                cout << "ID:" << p[middle].id << endl;
+                cout << "Descrição: " << p[middle].descricao << endl;
+                cout << "Quantidade em Estoque: " << p[middle].qtdeEstoque << endl;
+                cout << "Quantidade Mínima: " << p[middle].minEstoque << endl;
+                cout << "Quantidade Maxíma: " << p[middle].maxEstoque << endl;
+                cout << "Preço Unitário: R$" << p[middle].preco << endl;
+                cout << "Valor Total em Estoque: R$" << (p[middle].preco * p[middle].qtdeEstoque) << endl;
+                break;
+            }
+        }
+    }
 
 void mergeCliente(Cliente cl[],int &sizeCliente, Cliente clT[],int &cont,Cliente clA[]) {
     int i=0,j=0,a=0;
@@ -564,4 +727,36 @@ void mergeMecanico(Mecanico v[],int &sizeMecanico, Mecanico mT[],int &cont,Mecan
         v[i] = mA[i];
     }
 }
+
+void mergeOrdem(Ordem o[],int &sizeOrdem, Ordem oT[],int &cont,Ordem oA[]) {
+    int i=0,j=0,a=0;
+
+    while (i < sizeOrdem and j < cont) {
+        if (o[i].id < oT[j].id) {
+            oA[a] = o[i];
+            i++;
+        }else {
+            oA[a] = oT[j];
+            j++;
+        }
+        a++;
+    }
+    while (i < sizeOrdem ) {
+        oA[a] = o[i];
+        i++;
+        a++;
+    }
+    while (j < cont) {
+        oA[a] = oT[j];
+        j++;
+        a++;
+    }
+    sizeOrdem = a;
+    for (int i=0; i < sizeOrdem; i++) {
+        o[i] = oA[i];
+    }
+}
+
+
+
 
