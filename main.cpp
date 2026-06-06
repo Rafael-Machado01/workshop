@@ -58,6 +58,8 @@ void newMecanico(Mecanico m[],int &sizeMecanico,Mecanico mT[],Mecanico mA[]);
 void mergeMecanico(Mecanico m[],int &sizeMecanico,Mecanico mT[],int &cont,Mecanico mA[]);
 void newOrdem(Ordem o[],int &sizeOrdem,Cliente cl[], int sizeCliente,Veiculo v[], int sizeVeiculo,Mecanico m[],int sizeMecanico, Servico s[],Peca p[],Ordem oT[],Ordem oA[]);
 void mergeOrdem(Ordem o[],int &sizeOrdem, Ordem oT[],int &cont,Ordem oA[]);
+void buy(Peca p[]);
+void money(Ordem o[], int &sizeOrdem, Peca p[],Servico s[]);
 void menu(Cidade c[],Servico s[],Peca p[],Cliente cl[],int &sizeCliente,Cliente clT[],Cliente clA[],Veiculo v[],int &sizeVeiculo,Veiculo vT[],Veiculo vA[],Mecanico m[],int &sizeMecanico,Mecanico mT[],Mecanico mA[],Ordem o[],int &sizeOrdem,Ordem oT[],Ordem oA[]);
 
 int main() {
@@ -80,7 +82,7 @@ int main() {
         {2, 15, 3, 30, "Pastilha de Freio", 89.90},
         {3, 10, 2, 20, "Bateria 60Ah", 420.00},
         {4, 25, 5, 40, "Vela de Ignicao", 18.50},
-        {5, 8, 2, 15, "Correia Dentada", 150.00}
+        {5, 1, 2, 15, "Correia Dentada", 150.00}
     };
     Cliente cl[T*2] = {
         {1, 1, "Joao Silva", "18998112233", "Rua das Flores, 120"},
@@ -220,6 +222,8 @@ void menu(Cidade c[],Servico s[],Peca p[],Cliente cl[],int &sizeCliente,Cliente 
                     cout << "\n\n\t\tMenu Funções - Racing Fema" << endl;
                     cout << "\n1 - Abrir Ordem de Servico";
                     cout << "\n2- Ler Peça";
+                    cout << "\n3 - Comprador";
+                    cout << "\n4 - Valor Mão de Obra";
                     cout << "\n0 - Voltar";
                     cout << "\n\nEscolha uma opcao: ";
                     cin >> opSecond;
@@ -229,6 +233,12 @@ void menu(Cidade c[],Servico s[],Peca p[],Cliente cl[],int &sizeCliente,Cliente 
                             break;
                         case 2:
                             searchPeca(p);
+                            break;
+                        case 3:
+                            buy(p);
+                            break;
+                        case 4:
+                             money(o,sizeOrdem,p,s);
                             break;
                         case 0:
                             cout << "Voltando...\n";
@@ -296,8 +306,8 @@ void readVeiculo(Veiculo v[],int sizeVeiculo) {
     }
 }
 
-void readMecanico(Mecanico m[], int sizeVeiculo) {
-    for (int i=0; i < sizeVeiculo; i++) {
+void readMecanico(Mecanico m[], int sizeMecanico) {
+    for (int i=0; i < sizeMecanico; i++) {
         cout << "ID: " << m[i].id << endl;
         cout << "Nome: " << m[i].nome << endl;
         cout << "Telefone: " << m[i].telefone << endl;
@@ -453,16 +463,16 @@ void newOrdem(Ordem o[],int &sizeOrdem,Cliente cl[], int sizeCliente,Veiculo v[]
             cout << "Digite a Placa do Veiculo: " << endl;
             cin.ignore();
             getline(cin,oT[cont].vPlaca);
-            searchVeiculo(v,sizeVeiculo,o[cont].vPlaca,exist,cl,sizeCliente);
+            searchVeiculo(v,sizeVeiculo,oT[cont].vPlaca,exist,cl,sizeCliente);
             cout << "Digite o ID do Mecanico: " << endl;
             cin >> oT[cont].idMecanico;
-            searchMecanico(m,sizeMecanico,exist,o[cont].idMecanico);
+            searchMecanico(m,sizeMecanico,exist,oT[cont].idMecanico);
             cout << "Digite a Data: " << endl;
             cin.ignore();
             getline(cin,oT[cont].data);
             cout << "Digite o ID do Serviço: " << endl;
             cin >> oT[cont].idServico;
-            searchServico(s,o[cont].idServico);
+            searchServico(s,oT[cont].idServico);
             cout << "Digite o ID da Peça: " << endl;
             cin >> oT[cont].idPeca;
             searchPeca(p,oT[cont].idPeca);
@@ -556,6 +566,7 @@ void searchMecanico(Mecanico m[],int sizeMecanico,bool &exist, int x) {
         else {
             cout << "Mecanico encontrado!" << endl;
             cout << "ID: " << m[middle].id << " Nome: " << m[middle].nome << endl;
+            cout << "Especialidade: " << m[middle].especialidade << endl;
             exist = true;
             break;
         }
@@ -755,6 +766,31 @@ void mergeOrdem(Ordem o[],int &sizeOrdem, Ordem oT[],int &cont,Ordem oA[]) {
     for (int i=0; i < sizeOrdem; i++) {
         o[i] = oA[i];
     }
+}
+
+void buy(Peca p[]) {
+    float total=0;
+    for (int i=0; i < T; i++) {
+        if (p[i].qtdeEstoque <= p[i].minEstoque) {
+            cout << "ID: " << p[i].id << endl;
+            cout << "Descrição: " << p[i].descricao << endl;
+            cout << "Quantidade em Estoque: " << p[i].qtdeEstoque << endl;
+            cout << "Quantidade a Ser Comprada: " << (p[i].maxEstoque - p[i].qtdeEstoque ) << endl;
+            cout << "Estoque Maximo:" << p[i].maxEstoque << endl;
+            cout << "Valor da compra da peça: " << (p[i].maxEstoque - p[i].qtdeEstoque ) * p[i].preco << endl;
+            total += (p[i].maxEstoque - p[i].qtdeEstoque ) * p[i].preco;
+        }
+    }
+    cout << "Custará R$" << total << endl;
+}
+
+void money(Ordem o[], int &sizeOrdem, Peca p[],Servico s[]) {
+    float total=0;
+    for (int i=0; i < sizeOrdem; i++) {
+        cout << "Ordem de servico ID: " << o[i].id << endl;
+        total +=  (o[i].qtdePeca * p[o[i].idPeca].preco) + s[o[i].idServico].valorMaoDeObra;
+    }
+    cout << "Total R$" << total << endl;
 }
 
 
